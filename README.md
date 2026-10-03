@@ -5,8 +5,6 @@
 [![English](https://img.shields.io/badge/EN-English-blue)](README.md)
 [![中文](https://img.shields.io/badge/CN-中文-red)](README_CN.md)
 
-![Go Build](https://github.com/softwaredc/minirpc/actions/workflows/go-ci.yml/badge.svg)
-![C++ Build](https://github.com/softwaredc/minirpc/actions/workflows/cpp-ci.yml/badge.svg)
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 
 </div>
