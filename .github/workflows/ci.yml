@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  go:
+    name: Go (${{ matrix.go-version }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: ["1.22", "1.23"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Build
+        run: cd go && go build ./...
+
+      - name: Test
+        run: cd go && go test ./... -v
+
+  cpp:
+    name: C++ (${{ matrix.compiler.name }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - compiler: { name: GCC, cxx: g++, cc: gcc, pkg: "build-essential" }
+          - compiler: { name: Clang, cxx: clang++, cc: clang, pkg: "clang" }
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install ${{ matrix.compiler.name }}
+        run: sudo apt-get update && sudo apt-get install -y ${{ matrix.compiler.pkg }} cmake
+
+      - name: Configure (CMake)
+        env:
+          CC: ${{ matrix.compiler.cc }}
+          CXX: ${{ matrix.compiler.cxx }}
+        run: |
+          cd cpp
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+
+      - name: Build
+        run: cd cpp && cmake --build build -j$(nproc)
+
+      - name: Run tests
+        run: |
+          cd cpp/build
+          ctest --output-on-failure

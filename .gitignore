@@ -1,0 +1,33 @@
+# CMake
+cpp/build/
+cmake-build-*/
+
+# Build artifacts
+*.o
+*.out
+*.a
+*.so
+*.dylib
+*.dll
+
+# CMake cache
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# Go
+go/vendor/
+go/*.test
+go/*.out
+
+# Temp files
+/tmp_*.cpp
+/tmp_*.go
+*.swp
+*~
+
+# IDE
+.vscode/
+.idea/
+*.user
